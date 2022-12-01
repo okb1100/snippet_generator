@@ -1,0 +1,18 @@
+version: "2"
+services:
+  snippet-generator:
+    image: aikain/simplehttpserver:0.1
+    restart: always
+    volumes:
+      - "./dist:/var/www"
+    networks:
+      - traefik
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.snippet-generator.rule=Host(`snippet.simplstack.com`)"
+      - "traefik.http.routers.snippet-generator.tls=true"
+      - "traefik.http.routers.snippet-generator.tls.certresolver=simplstackLE"
+
+networks:
+    traefik:
+      external: true

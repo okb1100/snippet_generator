@@ -4,15 +4,31 @@ import TextBox from "./components/TextBox";
 
 const escape = (string: string) => string.replaceAll('"', '\\"');
 
+const DEFAULT_CONTENT = `
+import React from 'react'
+
+type \${1:COMPONENT_NAME}Props = {}
+
+const \${1:COMPONENT_NAME}: React.FC<\${1:COMPONENT_NAME}Props> = (props) => {
+  return (
+    <>
+      <div>\${1:COMPONENT_NAME}</div>
+    </>
+  )
+}
+
+export default \${1:COMPONENT_NAME}
+
+`
 export default function App() {
   const [keyword, setKeyword] = useState("");
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
-  const [content, setContent] = useState("");
+  const [content, setContent] = useState(DEFAULT_CONTENT);
 
   const parseBody = (code: string) => {
     const reducer = (prev: string, curr: string) =>
-      `${prev}\n\t"${escape(curr)}",`;
+      `${prev}\n\t\t"${escape(curr)}",`;
     return code.split("\n").reduce(reducer, "");
   };
 
@@ -20,19 +36,39 @@ export default function App() {
     return `
     "${escape(name)}": {
       "prefix": "${escape(keyword)}",
-      "body": [
-        ${parseBody(content)}
+      "body": [${parseBody(content)}
       ],
       "description": "${escape(description)}"
     }
     `;
   }, [content, parseBody]);
 
+  const handleCopyPressed = () => {
+    const type = "text/plain";
+    const blob = new Blob([snippet], { type });
+    const data = [new ClipboardItem({ [type]: blob })];
+
+    navigator.clipboard.write(data).then(
+      () => {
+        alert("Copied to clipboard");
+      },
+      () => {
+        alert("Clipboard permission error");
+      }
+    );
+  };
+
   return (
     <>
       <div className="header">
         <p>vscode snippet generator</p>
-        Use <span className="shortcut">⌘+E</span> to insert a variable
+        Use <span className="shortcut">⌘+E</span> to insert a{" "}
+        <a
+          target="_blank"
+          href="https://code.visualstudio.com/docs/editor/userdefinedsnippets#_variables"
+        >
+          variable
+        </a>
       </div>
       <main>
         <div className="section left">
@@ -55,11 +91,22 @@ export default function App() {
           />
         </div>
         <div className="section right">
+          <button onClick={handleCopyPressed} className="copy">
+            Copy
+          </button>
           <TextBox main disabled content={snippet} />
         </div>
       </main>
       <div className="footer">
-        inspired by <a href="https://snippet-generator.app/">snippet generator</a> by Pawel Grzybek
+        <p>
+          inspired by{" "}
+          <a target="_blank" href="https://snippet-generator.app/">
+            snippet generator
+          </a>
+        </p>
+        <a target="_blank" href="https://simplstack.com">
+          simplstack
+        </a>
       </div>
     </>
   );

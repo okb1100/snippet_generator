@@ -20,7 +20,7 @@ body {
 
 main {
   display: flex;
-  min-height: 80vh;
+  min-height: 70vh;
   flex: 1;
 }
 
@@ -47,8 +47,10 @@ textarea {
   border: none;
   outline: none;
   resize: none;
-  border-bottom: 1px solid var(--dark);
+  border: 1px solid var(--primary);
   margin-top: .25rem;
+  background-color: var(--dark);
+  color: var(--light);
 }
 
 textarea.main {
@@ -68,4 +70,18 @@ textarea[disabled] {
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   padding: 4px;
   font-size: 12px;
+}
+
+button.copy {
+  transition: background-color 250ms;
+  cursor: pointer;
+  background-color: var(--dark);
+  color: var(--light);
+  border: 1px solid var(--secondary);
+  border-radius: 4px;
+  padding: 1rem;
+}
+
+button.copy:hover {
+  background-color: var(--primary);
 }
