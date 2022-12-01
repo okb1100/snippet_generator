@@ -61,7 +61,7 @@ export default function App() {
   return (
     <>
       <div className="header">
-        <p>vscode snippet generator</p>
+        <p> <a target="_blank" href="https://github.com/okb1100/snippet_generator">vscode snippet generator</a> </p>
         Use <span className="shortcut">⌘+E</span> to insert a{" "}
         <a
           target="_blank"
